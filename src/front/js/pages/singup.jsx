@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
+import Swal from 'sweetalert2'
 
 import { Context } from "../store/appContext";
 
@@ -21,12 +22,24 @@ export const SingUp = () => {
 		e.preventDefault();
         console.log("data.email", data.email)
         console.log("data.password", data.password)
-		// const result = await actions.singUp(data.email, data.password);
-		// if (result) {
-		// 	navigate("/protected_route");
-		// } else {
-		// 	alert("Error logging in");
-		// }
+		const result = await actions.singUp(data);
+		if (!result.error) {
+
+            Swal.fire({
+                icon: "success",
+                title: result.msg,
+                showConfirmButton: false,
+                timer: 1500
+              });
+            // navigate("/login");
+		} else {
+            Swal.fire({
+                icon: "error",
+                title: result.error,
+                showConfirmButton: false,
+                timer: 1500
+              });
+		}
 	};
 
     return (

@@ -46,7 +46,36 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				//reset the global store
 				setStore({ demo: demo });
-			}
+			},
+			singUp: async (data) => {
+				console.log("---------------singUp---------------", data);
+				try {
+					const response = await fetch(process.env.BACKEND_URL + "api/signup", {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json"
+						},
+						body: JSON.stringify({
+							email:data.email,
+							password:data.password
+						})
+					})
+					if (!response.ok){
+						const dataResp = await response.json()
+						console.log("data:", dataResp);
+						throw new Error(dataResp.error);
+					}
+
+					const dataResp = await response.json()
+
+					console.log("data:", dataResp);
+				
+					return dataResp;
+				} catch(error){
+					console.log("Error: ", error)
+					return {"error": error}
+				}
+			},
 		}
 	};
 };

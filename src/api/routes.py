@@ -16,18 +16,35 @@ CORS(api)
 
 @api.route("/signup", methods=["POST"])
 def create_one_user():
-    body=json.loads(request.data)
-    new_user=User(
-        email=body["email"],
-        password=current_app.bcrypt.generate_password_hash(body["password"]).decode('utf-8'),
-        name=body["name"],
-        lastname=body["lastname"],
-        age=body["age"],
-        is_active= True
-    )
-    db.session.add(new_user)
-    db.session.commit()
-    return jsonify({"msg":"user_created"}),201
+    try:
+        body = request.get_json()
+        if body is None:
+            return jsonify({"error": "JSON invalido"}), 400
+
+        email = body.get("email")
+        password = body.get("password")
+
+        if not email or not password:
+            return jsonify({"error": "Email and password are required"}), 400
+
+        existing_user = User.query.filter_by(email=email).first()
+        if existing_user:
+            return jsonify({"error": "User already exists"}), 400
+
+        new_user = User(
+            email=email,
+            password=current_app.bcrypt.generate_password_hash(password).decode('utf-8'),
+            is_active=True
+        )
+
+        db.session.add(new_user)
+        db.session.commit()
+        
+        return jsonify({"msg": "User created"}), 201
+    except KeyError as e:
+        return jsonify({"error": f"Falta campo: {str(e)}"}), 400
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
    
 
 #----------------------------------------------------------------------------------------------------------

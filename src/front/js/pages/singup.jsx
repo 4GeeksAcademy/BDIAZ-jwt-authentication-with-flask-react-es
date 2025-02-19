@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2'
 
 import { Context } from "../store/appContext";
@@ -10,6 +10,7 @@ export const SingUp = () => {
 		email: "",
 		password: ""
 	});
+    const navigate = useNavigate();
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
@@ -24,21 +25,21 @@ export const SingUp = () => {
         console.log("data.password", data.password)
 		const result = await actions.singUp(data);
 		if (!result.error) {
-
+            navigate("/login");
             Swal.fire({
                 icon: "success",
                 title: result.msg,
                 showConfirmButton: false,
                 timer: 1500
-              });
-            // navigate("/login");
+            });
+
 		} else {
             Swal.fire({
                 icon: "error",
                 title: result.error,
                 showConfirmButton: false,
                 timer: 1500
-              });
+            });
 		}
 	};
 

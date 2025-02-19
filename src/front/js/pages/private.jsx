@@ -8,9 +8,14 @@ export const Private = () => {
 
     const navigate = useNavigate();
 
-    useEffect() {
-        
-    }
+    useEffect(() => {
+        if (!localStorage.getItem("accessToken")) {
+            console.log("No existe token")
+            navigate("/")
+        } else {
+            console.log("Existe token")
+        }
+    }, []);
 
 
     return (
@@ -18,9 +23,9 @@ export const Private = () => {
             <div className="row">
                 <div className="col">
                    <h1>contenido super privado</h1>
-
                 </div>
             </div>
         </div>
+
     );
 };

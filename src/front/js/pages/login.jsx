@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 import Swal from 'sweetalert2'
+
 
 import { Context } from "../store/appContext";
 
 export const Login = () => {
     const { store, actions } = useContext(Context);
+    const navigate = useNavigate();
     const [data, setData] = useState({
         email: "",
         password: ""
@@ -24,14 +26,14 @@ export const Login = () => {
         console.log("data.password", data.password)
         const result = await actions.login(data);
         if (!result.error) {
-
+            navigate("/private");
             Swal.fire({
                 icon: "success",
-                title: result.msg,
+                title: "Inicio de sesion exitoso",
                 showConfirmButton: false,
                 timer: 1500
             });
-            // navigate("/login");
+
         } else {
             Swal.fire({
                 icon: "error",
@@ -44,6 +46,7 @@ export const Login = () => {
 
     return (
         <div className="container">
+            <h1>Login</h1>
             <div className="row">
                 <div className="col">
                     <form onSubmit={handleLogin}>

@@ -45,6 +45,7 @@ export const SingUp = () => {
 
     return (
         <div className="container">
+            <h1>Sing Up</h1>
             <div className="row">
                 <div className="col">
                     <form onSubmit={handleSingUp}>

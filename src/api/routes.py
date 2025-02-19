@@ -54,19 +54,16 @@ def create_one_user():
 def login():
     email = request.json.get("email", None)
     password = request.json.get("password", None)
-    #name = request.json.get("name", None)
-    #lastname = request.json.get("lastname", None)
-    #age = request.json.get("age", None)
 
 
     user= User.query.filter_by(email=email ).first()
 
     if user is None :
-        return jsonify({"msg": "Bad username or password"}), 401
+        return jsonify({"error": "Bad username or password"}), 401
     
-    valid_password= current_app.bcrypt.check_password_hash(user.password, password)
+    valid_password = current_app.bcrypt.check_password_hash(user.password, password)
     if valid_password is False:
-        return jsonify({"msg": "invalid password"}), 401
+        return jsonify({"error": "invalid password"}), 401
 
     access_token = create_access_token(identity=email)
     return jsonify(access_token=access_token)
